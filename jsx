@@ -23,6 +23,35 @@ export default function LabelDesigner() {
     const fontCategorySliderRef = useRef(null);
     const labelRef = useRef(null);
 
+    // Character limits for Text1 and Text2
+    const maxCharsText1 = 20; // Adjusted based on label width
+    const maxCharsText2 = 20;
+
+    // Dynamic font size for Text1 based on character count
+    const calculateFontSize = (text) => {
+        const baseFontSize = 24; // Maximum font size
+        const minFontSize = 12; // Minimum font size
+        const charsPerLine = 10; // Approximate characters per line before scaling down
+        const length = text.length;
+
+        if (length <= charsPerLine) {
+            return baseFontSize;
+        }
+
+        const scaleFactor = charsPerLine / length;
+        const newFontSize = Math.max(minFontSize, baseFontSize * scaleFactor);
+        return Math.round(newFontSize);
+    };
+
+    const fontSizeText1 = calculateFontSize(text1);
+
+    const handleTextChange = (setter, maxChars) => (e) => {
+        const value = e.target.value;
+        if (value.length <= maxChars) {
+            setter(value);
+        }
+    };
+
     const fontCategories = useMemo(() => {
         const baseCategories = {
             "Sans Serif": [
@@ -234,7 +263,8 @@ export default function LabelDesigner() {
     }, [labelWidth, quantity]);
 
     const renderLabelContent = useCallback(() => {
-        const fontSize = 16;
+        const fontSizeText2 = 16; // Fixed font size for Text2
+        const fontSizeText3 = 16; // Fixed font size for Text3
 
         return (
             <div className="label-container">
@@ -257,23 +287,25 @@ export default function LabelDesigner() {
                                 className="text-display"
                                 style={{
                                     fontFamily: font,
-                                    fontSize: `${fontSize}px`,
+                                    fontSize: `${fontSizeText1}px`,
                                 }}
                             >
                                 {text1 || ""}
                             </span>
                         </div>
-                        <div className="text-section top-adjacent">
-                            <span
-                                className="text-display"
-                                style={{
-                                    fontFamily: font,
-                                    fontSize: `${fontSize}px`,
-                                }}
-                            >
-                                {text2 || ""}
-                            </span>
-                        </div>
+                        {text2 && (
+                            <div className="text-section top-adjacent">
+                                <span
+                                    className="text-display"
+                                    style={{
+                                        fontFamily: font,
+                                        fontSize: `${fontSizeText2}px`,
+                                    }}
+                                >
+                                    {text2 || ""}
+                                </span>
+                            </div>
+                        )}
 
                         {/* Icons section - always centered */}
                         {icons.length > 0 && (
@@ -282,15 +314,6 @@ export default function LabelDesigner() {
                                     <span
                                         key={`icon-${index}`}
                                         className="icon"
-                                        style={{
-                                            display: 'inline-flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            flex: '0 0 auto',
-                                            lineHeight: 1,
-                                            verticalAlign: 'middle',
-                                            margin: '0 4px',
-                                        }}
                                     >
                                         <Icon name={iconObj.name} color="#000000" />
                                     </span>
@@ -304,7 +327,7 @@ export default function LabelDesigner() {
                                 className="text-display"
                                 style={{
                                     fontFamily: font,
-                                    fontSize: `${fontSize}px`,
+                                    fontSize: `${fontSizeText3}px`,
                                 }}
                             >
                                 {text3 || ""}
@@ -314,7 +337,7 @@ export default function LabelDesigner() {
                 </div>
             </div>
         );
-    }, [text1, text2, text3, font, icons]);
+    }, [text1, text2, text3, font, icons, fontSizeText1]);
 
     const captureLabel = useCallback(async () => {
         try {
@@ -520,7 +543,7 @@ export default function LabelDesigner() {
                                     id="text1"
                                     placeholder="Enter Text 1"
                                     value={text1}
-                                    onChange={(e) => setText1(e.target.value)}
+                                    onChange={handleTextChange(setText1, maxCharsText1)}
                                 />
                             </div>
                             <div className="text-input-group">
@@ -530,7 +553,7 @@ export default function LabelDesigner() {
                                     id="text2"
                                     placeholder="Enter Text 2"
                                     value={text2}
-                                    onChange={(e) => setText2(e.target.value)}
+                                    onChange={handleTextChange(setText2, maxCharsText2)}
                                 />
                             </div>
                             <div className="control-selected-icons">
@@ -538,7 +561,7 @@ export default function LabelDesigner() {
                                     <div key={index} className="control-selected-icon">
                                         <Icon name={iconObj.name} color="#000000" size={16} />
                                         <button className="control-remove-icon" onClick={() => removeIcon(index)}>
-                                            <Icon name="x" color="#EF4444" size={16} />
+                                            <Icon name="x" color="#FFFFFF" size={12} />
                                         </button>
                                     </div>
                                 ))}
