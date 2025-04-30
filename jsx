@@ -11,7 +11,7 @@ export default function LabelDesigner() {
     const [text3, setText3] = useState("");
     const [font, setFont] = useState("Arial");
     const [fontCategory, setFontCategory] = useState("All");
-    const [icons, setIcons] = useState([]); // Array to store up to 5 icons with positions
+    const [icons, setIcons] = useState([]); // Array to store up to 5 icons
     const [iconCategory, setIconCategory] = useState("All");
     const [scrollPosition, setScrollPosition] = useState(0);
     const [fontScrollPosition, setFontScrollPosition] = useState(0);
@@ -79,7 +79,7 @@ export default function LabelDesigner() {
             {
                 name: 'Letters',
                 icon: 'a',
-                icons: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+                icons: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', "r", 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
             },
             {
                 name: 'Numbers',
@@ -123,7 +123,7 @@ export default function LabelDesigner() {
             {
                 name: 'Weather',
                 icon: 'cloud',
-                icons: ['cloud', 'cloud-arrow-downPUBLISH', 'cloud-arrow-up BALL', 'cloud-fog', 'cloud-lightning', 'cloud-rain', 'cloud-snow',
+                icons: ['cloud', 'cloud-arrow-down', 'cloud-arrow-up', 'cloud-fog', 'cloud-lightning', 'cloud-rain', 'cloud-snow',
                     'moon', 'moon-cloud', 'moon-fog', 'rainbow', 'rainbow-cloud', 'sun', 'sun-cloud', 'sun-fog', 'wind']
             },
             {
@@ -218,18 +218,11 @@ export default function LabelDesigner() {
             alert("You can only add up to 5 icons.");
             return;
         }
-        // Default position: 0 (before all texts)
-        setIcons([...icons, { name: iconName, position: 0 }]);
+        setIcons([...icons, { name: iconName }]);
     }, [icons]);
 
     const removeIcon = useCallback((index) => {
         setIcons(icons.filter((_, i) => i !== index));
-    }, [icons]);
-
-    const updateIconPosition = useCallback((index, newPosition) => {
-        const updatedIcons = [...icons];
-        updatedIcons[index].position = newPosition;
-        setIcons(updatedIcons);
     }, [icons]);
 
     const calculatePrice = useCallback(() => {
@@ -241,103 +234,7 @@ export default function LabelDesigner() {
     }, [labelWidth, quantity]);
 
     const renderLabelContent = useCallback(() => {
-        const fontSize = 16; // Fixed font size for consistency
-        const texts = [text1, text2, text3].filter(t => t); // Only include non-empty texts
-        const content = texts.length > 0 ? texts.join(' ') : 'Enter care instructions';
-
-        // Sort icons by position to ensure they are rendered in the correct order
-        const sortedIcons = [...icons].sort((a, b) => a.position - b.position);
-
-        // Prepare label content with icons and texts
-        const elements = [];
-        let currentTextIndex = 0;
-
-        sortedIcons.forEach((iconObj, iconIndex) => {
-            const { name, position } = iconObj;
-
-            // Add texts up to the current icon's position
-            while (currentTextIndex < position && currentTextIndex < texts.length) {
-                if (texts[currentTextIndex]) {
-                    elements.push(
-                        <span
-                            key={`text-${currentTextIndex}`}
-                            className="label-content"
-                            style={{
-                                wordBreak: 'break-word',
-                                overflowWrap: 'break-word',
-                                whiteSpace: 'normal',
-                                lineHeight: 1.2,
-                                margin: '0 4px',
-                            }}
-                        >
-                            {texts[currentTextIndex]}
-                        </span>
-                    );
-                }
-                currentTextIndex++;
-            }
-
-            // Add the icon
-            elements.push(
-                <span
-                    key={`icon-${iconIndex}`}
-                    className="icon"
-                    style={{
-                        width: `${fontSize}px`,
-                        height: `${fontSize}px`,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: '0 0 auto',
-                        lineHeight: 1,
-                        verticalAlign: 'middle',
-                        margin: '0 4px',
-                    }}
-                >
-                    <Icon name={name} color="#000000" />
-                </span>
-            );
-        });
-
-        // Add remaining texts
-        while (currentTextIndex < texts.length) {
-            if (texts[currentTextIndex]) {
-                elements.push(
-                    <span
-                        key={`text-${currentTextIndex}`}
-                        className="label-content"
-                        style={{
-                            wordBreak: 'break-word',
-                            overflowWrap: 'break-word',
-                            whiteSpace: 'normal',
-                            lineHeight: 1.2,
-                            margin: '0 4px',
-                        }}
-                    >
-                        {texts[currentTextIndex]}
-                    </span>
-                );
-            }
-            currentTextIndex++;
-        }
-
-        if (elements.length === 0) {
-            elements.push(
-                <span
-                    key="default-text"
-                    className="label-content"
-                    style={{
-                        wordBreak: 'break-word',
-                        overflowWrap: 'break-word',
-                        whiteSpace: 'normal',
-                        lineHeight: 1.2,
-                        margin: '0 4px',
-                    }}
-                >
-                    {content}
-                </span>
-            );
-        }
+        const fontSize = 16;
 
         return (
             <div className="label-container">
@@ -353,26 +250,66 @@ export default function LabelDesigner() {
                         position: 'relative',
                     }}
                 >
-                    <div
-                        className="label-text-display"
-                        style={{
-                            fontSize: `${fontSize}px`,
-                            display: 'flex',
-                            flexDirection: 'row',
-                            flexWrap: 'wrap',
-                            padding: '8px 12px',
-                            margin: '0',
-                            lineHeight: 1.2,
-                            boxSizing: 'border-box',
-                            width: '100%',
-                            height: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            overflow: 'hidden',
-                            gap: '8px',
-                        }}
-                    >
-                        {elements}
+                    <div className="label-text-display">
+                        {/* Top section for text1 and text2 */}
+                        <div className="text-section top">
+                            <span
+                                className="text-display"
+                                style={{
+                                    fontFamily: font,
+                                    fontSize: `${fontSize}px`,
+                                }}
+                            >
+                                {text1 || ""}
+                            </span>
+                        </div>
+                        <div className="text-section top-adjacent">
+                            <span
+                                className="text-display"
+                                style={{
+                                    fontFamily: font,
+                                    fontSize: `${fontSize}px`,
+                                }}
+                            >
+                                {text2 || ""}
+                            </span>
+                        </div>
+
+                        {/* Icons section - always centered */}
+                        {icons.length > 0 && (
+                            <div className="icons-section">
+                                {icons.map((iconObj, index) => (
+                                    <span
+                                        key={`icon-${index}`}
+                                        className="icon"
+                                        style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            flex: '0 0 auto',
+                                            lineHeight: 1,
+                                            verticalAlign: 'middle',
+                                            margin: '0 4px',
+                                        }}
+                                    >
+                                        <Icon name={iconObj.name} color="#000000" />
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Bottom text */}
+                        <div className="text-section bottom">
+                            <span
+                                className="text-display"
+                                style={{
+                                    fontFamily: font,
+                                    fontSize: `${fontSize}px`,
+                                }}
+                            >
+                                {text3 || ""}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -420,13 +357,11 @@ export default function LabelDesigner() {
                 textDisplay.style.cssText += `
                     transform: translateY(-8%);
                     display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    justify-content: center;
+                    flex-direction: column;
+                    justify-content: space-between;
                     width: auto !important;
                     height: auto !important;
-                    gap: 12px;
+                    gap: 10px;
                     white-space: normal !important;
                     overflow: visible !important;
                     max-height: none !important;
@@ -434,8 +369,8 @@ export default function LabelDesigner() {
                 `;
             }
 
-            const labelContent = clone.querySelectorAll('.label-content');
-            labelContent.forEach(content => {
+            const textDisplays = clone.querySelectorAll('.text-display');
+            textDisplays.forEach(content => {
                 content.style.cssText += `
                     transform: translateY(-8%);
                     display: inline-block;
@@ -481,7 +416,7 @@ export default function LabelDesigner() {
 
                     const textDisplay = element.querySelector('.label-text-display');
                     const icons = element.querySelectorAll('.icon');
-                    const labelContent = element.querySelectorAll('.label-content');
+                    const textDisplays = element.querySelectorAll('.text-display');
 
                     if (textDisplay) {
                         textDisplay.style.transform = 'translateY(-8%)';
@@ -489,7 +424,7 @@ export default function LabelDesigner() {
                     icons.forEach(icon => {
                         icon.style.transform = 'translateY(-8%)';
                     });
-                    labelContent.forEach(content => {
+                    textDisplays.forEach(content => {
                         content.style.transform = 'translateY(-8%)';
                     });
                 }
@@ -563,61 +498,65 @@ export default function LabelDesigner() {
 
     const prices = useMemo(() => calculatePrice(), [calculatePrice]);
 
-    // Define possible positions for icons
-    const iconPositionOptions = useMemo(() => {
-        const texts = [text1, text2, text3].filter(t => t);
-        const options = [{ value: 0, label: 'Before Text 1' }];
-
-        texts.forEach((_, index) => {
-            if (index < texts.length) {
-                options.push({ value: index + 1, label: `After Text ${index + 1}` });
-            }
-        });
-
-        return options;
-    }, [text1, text2, text3]);
-
     return (
         <div className="label-designer-wrapper">
             <div className="designer-container">
                 <div className="designer-controls">
+                    {/* Text Input Section */}
                     <div className="control-group">
-                        <div className="group-title">
-                            Care Instructions
-                            <span className="help-icon">?
-                                <span className="tooltip">
-                                    Enter the care instructions for your label.
+                        <div className="text-input-section">
+                            <div className="group-title">
+                                Text Settings
+                                <span className="help-icon">?
+                                    <span className="tooltip">
+                                        Enter the text for your label here.
+                                    </span>
                                 </span>
-                            </span>
-                        </div>
-                        <div className="text-control-wrapper">
-                            <input
-                                type="text"
-                                value={text1}
-                                onChange={e => setText1(e.target.value)}
-                                className="label-text-input"
-                                placeholder="Enter first line"
-                                maxLength={70}
-                            />
-                            <input
-                                type="text"
-                                value={text2}
-                                onChange={e => setText2(e.target.value)}
-                                className="label-text-input"
-                                placeholder="Enter second line"
-                                maxLength={70}
-                            />
-                            <input
-                                type="text"
-                                value={text3}
-                                onChange={e => setText3(e.target.value)}
-                                className="label-text-input"
-                                placeholder="Enter third line"
-                                maxLength={70}
-                            />
+                            </div>
+                            <div className="text-input-group">
+                                <label htmlFor="text1">Text 1</label>
+                                <input
+                                    type="text"
+                                    id="text1"
+                                    placeholder="Enter Text 1"
+                                    value={text1}
+                                    onChange={(e) => setText1(e.target.value)}
+                                />
+                            </div>
+                            <div className="text-input-group">
+                                <label htmlFor="text2">Text 2</label>
+                                <input
+                                    type="text"
+                                    id="text2"
+                                    placeholder="Enter Text 2"
+                                    value={text2}
+                                    onChange={(e) => setText2(e.target.value)}
+                                />
+                            </div>
+                            <div className="control-selected-icons">
+                                {icons.map((iconObj, index) => (
+                                    <div key={index} className="control-selected-icon">
+                                        <Icon name={iconObj.name} color="#000000" size={16} />
+                                        <button className="control-remove-icon" onClick={() => removeIcon(index)}>
+                                            <Icon name="x" color="#EF4444" size={16} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="text-input-group">
+                                <label htmlFor="text3">Text 3</label>
+                                <input
+                                    type="text"
+                                    id="text3"
+                                    placeholder="Enter Text 3"
+                                    value={text3}
+                                    onChange={(e) => setText3(e.target.value)}
+                                />
+                            </div>
                         </div>
                     </div>
 
+                    {/* Font Selection Section */}
                     <div className="control-group">
                         <div className="group-title">
                             Font Style
@@ -679,6 +618,7 @@ export default function LabelDesigner() {
                         </div>
                     </div>
 
+                    {/* Icon Selection Section */}
                     <div className="control-group">
                         <div className="group-title">
                             Icons
@@ -699,7 +639,7 @@ export default function LabelDesigner() {
                                 </svg>
                             </button>
                             <div className="icon-category-slider" ref={categorySliderRef}>
-                                {iconCategories.map(category => (
+                                {iconCategories.map((category) => (
                                     <button
                                         key={category.name}
                                         className={`icon-category-button ${iconCategory === category.name ? 'active' : ''}`}
@@ -736,27 +676,10 @@ export default function LabelDesigner() {
                                 </div>
                             ))}
                         </div>
-                        <div className="selected-icons">
-                            {icons.map((iconObj, index) => (
-                                <div key={index} className="selected-icon">
-                                    <Icon name={iconObj.name} color="#000000" size={16} />
-                                    <select
-                                        value={iconObj.position}
-                                        onChange={(e) => updateIconPosition(index, parseInt(e.target.value))}
-                                    >
-                                        {iconPositionOptions.map(option => (
-                                            <option key={option.value} value={option.value}>
-                                                {option.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <button onClick={() => removeIcon(index)}>Remove</button>
-                                </div>
-                            ))}
-                        </div>
                     </div>
                 </div>
 
+                {/* Label Preview */}
                 <div className="designer-canvas" style={{ height: 'auto', minHeight: '600px' }}>
                     <div className="preview-header">
                         <div className="preview-info">
@@ -770,6 +693,8 @@ export default function LabelDesigner() {
                         <div
                             ref={labelRef}
                             className="label-preview"
+                            data-width={`${labelHeight * 3}px`}
+                            data-height={`${labelWidth * 3}px`}
                             style={{
                                 width: `${labelHeight * 3}px`,
                                 height: `${labelWidth * 3}px`,
