@@ -156,23 +156,33 @@
 }
 
 .control-selected-icon {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
+  justify-content: center;
+  padding: 4px;
   background: #F0F7FF;
   border: 1px solid var(--primary-color);
   border-radius: 4px;
+  width: 32px;
+  height: 32px;
 }
 
 .control-remove-icon {
-  background: none;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #EF4444;
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  transition: transform 0.2s ease;
 }
 
 .control-remove-icon:hover {
@@ -407,8 +417,8 @@
 /* Icon Options */
 .icon-options-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 12px;
   padding: 16px;
   max-height: 200px;
   overflow-y: auto;
@@ -422,6 +432,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .icon-option {
@@ -434,6 +445,8 @@
   border-radius: 6px;
   padding: 8px;
   box-sizing: border-box;
+  width: 100%;
+  transition: all 0.2s ease;
 }
 
 .icon-option:hover {
@@ -492,7 +505,8 @@
   padding: 2px;
 }
 
-.remove-icon:hover {
+.re
+move-icon:hover {
   transform: scale(1.1);
 }
 
@@ -565,7 +579,7 @@
   width: 180px;
   height: 420px;
   border-radius: 4px;
-  overflow: visible;
+  overflow: hidden;
   transition: width 0.3s ease, height 0.3s ease;
   border: 1px solid #E5E7EB;
 }
@@ -628,7 +642,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .label-content-wrapper {
@@ -639,6 +653,7 @@
   height: 100%;
   box-sizing: border-box;
   background: #FFFFFF;
+  overflow: hidden;
 }
 
 .label-text-display {
@@ -652,20 +667,22 @@
   width: 100%;
   min-height: 30px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
+  padding: 4px;
+  box-sizing: border-box;
 }
 
 .text-section.top,
 .text-section.top-adjacent {
-  position: absolute;
-  top: 10px;
-  width: 100%;
+  position: static;
+  margin-top: 10px;
 }
 
 .text-section.top-adjacent {
-  top: 40px;
+  margin-top: 0;
 }
 
 .text-section.bottom {
@@ -682,6 +699,7 @@
   white-space: normal;
   word-break: break-word;
   line-height: 1.4;
+  box-sizing: border-box;
 }
 
 .icons-section {
@@ -691,18 +709,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
   flex-wrap: nowrap;
-  padding: 10px 0;
+  padding: 8px 0;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
 
@@ -842,7 +863,7 @@
   }
 
   .icon-options-grid {
-    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
   }
 }
 
@@ -860,7 +881,7 @@
   }
 
   .icon-options-grid {
-    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
   }
 }
 
@@ -893,7 +914,7 @@
   }
 
   .icon-options-grid {
-    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
   }
 
   .preview-header {
@@ -909,7 +930,7 @@
   }
 
   .icon-options-grid {
-    grid-template-columns: repeat(auto-fill, minmax(28px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
   }
 }
 
