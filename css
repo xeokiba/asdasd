@@ -170,23 +170,31 @@
 
 .control-remove-icon {
   position: absolute;
-  top: -8px;
-  right: -8px;
-  background: #EF4444;
-  border: none;
+  top: -6px;
+  right: -6px;
+  background: #FF6B6B;
+  border: 2px solid white;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   padding: 0;
-  transition: transform 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .control-remove-icon:hover {
+  background: #FF4C4C;
   transform: scale(1.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.control-remove-icon svg {
+  fill: none;
+  stroke: white;
 }
 
 /* Font Category Section */
@@ -298,80 +306,7 @@
   color: var(--text-secondary);
 }
 
-/* Icon Category Section */
-.icon-category-section {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding: 0 28px;
-}
-
-.icon-category-slider {
-  display: flex;
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  gap: 8px;
-  padding: 4px 0;
-  width: 100%;
-}
-
-.icon-category-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 8px;
-  background: white;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  flex: 0 0 auto;
-  flex-shrink: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.icon-category-button:hover {
-  background: #F8FAFF;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.icon-category-button.active {
-  background: #F0F7FF;
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-}
-
-.icon-category-button:not(.active)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--primary-color);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.icon-category-button:not(.active):hover::after,
-.icon-category-button.active::after {
-  transform: scaleX(1);
-}
-
-.category-icon {
-  font-size: 16px;
-  line-height: 1;
-}
-
-.category-name {
-  display: none;
-}
-
+/* Scroll Buttons */
 .scroll-button {
   position: absolute;
   top: 50%;
@@ -429,6 +364,7 @@
 }
 
 .icon-option-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -449,11 +385,22 @@
   transition: all 0.2s ease;
 }
 
-.icon-option:hover {
+.icon-option:hover:not(:disabled) {
   background: #F8FAFF;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   border-color: var(--primary-color);
+}
+
+.icon-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.icon-option.selected {
+  background: #F0F7FF;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 .icon-option .icon {
@@ -476,38 +423,6 @@
   background: #F3F4F6;
   border-radius: 6px;
   margin-bottom: 4px;
-}
-
-.selected-icons {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.selected-icon {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
-  background: #F0F7FF;
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-}
-
-.remove-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2px;
-}
-
-.re
-move-icon:hover {
-  transform: scale(1.1);
 }
 
 /* Canvas Area */
@@ -572,67 +487,73 @@ move-icon:hover {
   position: relative;
   background: #F8F9FA;
   border-radius: 8px;
+  overflow: visible;
 }
 
 .label-preview {
   position: relative;
-  width: 180px;
-  height: 420px;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
   transition: width 0.3s ease, height 0.3s ease;
   border: 1px solid #E5E7EB;
+  z-index: 1;
 }
 
 .label-preview::before,
 .label-preview::after {
   position: absolute;
-  font-size: 12px;
-  color: var(--text-secondary);
+  z-index: 10;
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
 }
 
 .label-preview::before {
   content: '';
-  top: -20px;
+  top: -50px;
   left: 0;
   width: 100%;
   height: 1px;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="1"><path d="M0 0h5M7 0h3" stroke="gray" stroke-width="1"/></svg>') repeat-x;
-  display: flex;
-  justify-content: center;
+  background-size: 10px 1px;
 }
 
 .label-preview::before::after {
   content: attr(data-width);
-  background: #F8F9FA;
-  padding: 0 4px;
-  font-size: 12px;
+  background: #FFFFFF;
+  padding: 4px 8px;
+  font-size: 14px;
   color: var(--text-secondary);
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  position: relative;
+  z-index: 11;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .label-preview::after {
   content: '';
-  right: -20px;
+  right: -50px;
   top: 0;
   width: 1px;
   height: 100%;
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1" height="10"><path d="M0 0v5M0 7v3" stroke="gray" stroke-width="1"/></svg>') repeat-y;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-size: 1px 10px;
 }
 
 .label-preview::after::before {
   content: attr(data-height);
-  background: #F8F9FA;
-  padding: 4px 0;
-  font-size: 12px;
+  background: #FFFFFF;
+  padding: 4px 8px;
+  font-size: 14px;
   color: var(--text-secondary);
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
   transform: rotate(90deg);
   white-space: nowrap;
+  position: relative;
+  z-index: 11;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .label-container {
@@ -642,32 +563,31 @@ move-icon:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .label-content-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 15px;
   height: 100%;
   box-sizing: border-box;
   background: #FFFFFF;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 }
 
 .label-text-display {
   display: flex;
   flex-direction: column;
-  height: 100%;
   position: relative;
+  gap: 8px; /* Elemanlar arasında boşluk */
+  height: 100%;
 }
 
 .text-section {
   width: 100%;
-  min-height: 30px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -675,20 +595,37 @@ move-icon:hover {
   box-sizing: border-box;
 }
 
-.text-section.top,
-.text-section.top-adjacent {
+.text-section.top .text-display {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-section.top-adjacent .text-display,
+.text-section.bottom .text-display {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.text-section.top {
   position: static;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .text-section.top-adjacent {
-  margin-top: 0;
+  position: static;
+  margin-top: 0; /* Text1 ile Text2 arasında gap ile kontrol edilir */
 }
 
 .text-section.bottom {
-  position: absolute;
-  bottom: 25%;
+  position: static;
   width: 100%;
+  margin-top: 0; /* İkonlarla arasındaki mesafeyi bottom-section-wrapper ile kontrol ediyoruz */
 }
 
 .text-display {
@@ -722,9 +659,19 @@ move-icon:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
+}
+
+.bottom-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Text3'ü dikeyde ortala */
+  align-items: center;
+  width: 100%;
+  margin-top: 38px; /* İkonların yüksekliği (30px) + padding (8px) */
+  flex-grow: 1; /* Kalan alanı doldur */
 }
 
 /* Order Section */
@@ -894,8 +841,7 @@ move-icon:hover {
     padding: 0.5rem;
   }
 
-  .font-category-section,
-  .icon-category-section {
+  .font-category-section {
     padding: 0 20px;
   }
 
